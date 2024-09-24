@@ -53,6 +53,7 @@ export default function Home() {
     };
     setCycles((state) => [...state, newCycle]);
     setActiveCycleId(newCycle.id);
+    setAmountSecondsPassed(0);
     reset();
   }
 
@@ -68,13 +69,18 @@ export default function Home() {
   const isSubmiteDisabled = !task;
 
   useEffect(() => {
+    let interval: number;
     if (activeCycle) {
-      setInterval(() => {
+      interval = setInterval(() => {
         setAmountSecondsPassed(
           differenceInSeconds(new Date(), activeCycle.startDate)
         );
       }, 1000);
     }
+
+    return () => {
+      clearInterval(interval);
+    };
   }, [activeCycle]);
 
   return (
